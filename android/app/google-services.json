@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "116807774497",
+    "firebase_url": "https://gtaxi-de82d-default-rtdb.firebaseio.com",
+    "project_id": "gtaxi-de82d",
+    "storage_bucket": "gtaxi-de82d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:116807774497:android:b638578db8ba5e95440e60",
+        "android_client_info": {
+          "package_name": "com.example.trackingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "116807774497-4q5ad5s2lknca5bbjnhlsgoq5jhjv2m0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtgj4uYYb-gSlCbBYUuHhj9yL1Ou89a_E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "116807774497-4q5ad5s2lknca5bbjnhlsgoq5jhjv2m0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
