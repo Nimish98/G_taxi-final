@@ -10,7 +10,7 @@ class VehicleInfo extends StatefulWidget {
   _VehicleInfoState createState() => _VehicleInfoState();
 }
 
-class _VehicleInfoState extends State<VehicleInfo> {
+class _VehicleInfoState extends State<VehicleInfo>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
