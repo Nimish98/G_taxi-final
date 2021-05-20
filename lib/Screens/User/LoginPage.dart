@@ -246,7 +246,7 @@ if(user!=null && auth.currentUser.uid!=null){
                       ),
                     ),
                   style: TextButton.styleFrom(
-                      primary: Colors.black
+                      primary: Colors.black87
                   ),
                 ),
               ],
