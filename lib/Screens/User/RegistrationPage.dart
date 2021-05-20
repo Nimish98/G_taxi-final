@@ -299,7 +299,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       Navigator.pushNamedAndRemoveUntil(context, LoginPage.id, (route) => false);
                     },
                   style: TextButton.styleFrom(
-                      primary: Colors.black
+                      primary: Colors.black87
                   ),
                     child: Text(
                       user1==true?"Already have a USER\'s Account!! Log In":"Already have a DRIVER\'s Account!! Log In",
