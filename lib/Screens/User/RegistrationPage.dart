@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trackingapp/DataProviders/SharedPreferences.dart';
 import 'package:trackingapp/Screens/User/LoginPage.dart';
+import 'package:trackingapp/Widgets/GlobalVariables.dart';
 import 'package:trackingapp/Widgets/ProgressDialog.dart';
 import 'package:trackingapp/Widgets/TaxiButton.dart';
 import 'package:trackingapp/brand_colors.dart';
@@ -64,7 +65,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
       Exception thisEx = error;
       Navigator.pop(context);
-      scaffoldKey.currentState.showSnackBar(showSnackBar(thisEx.toString(),context));
+      rootScaffoldMessengerKey.currentState.showSnackBar(showSnackBar(thisEx.toString(),context));
 
   });
   if(user!=null){
@@ -127,7 +128,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     children: [
                       Theme(
                         data: ThemeData(
-                          primaryColor: BrandColors.colorAccent,
+                          primaryColor: driver==true?BrandColors.colorAccentPurple:BrandColors.colorAccent,
                         ),
                         child: TextField(
                           controller: fullName,
@@ -157,7 +158,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       ),
                       Theme(
                         data: ThemeData(
-                          primaryColor: BrandColors.colorAccent,
+                          primaryColor: driver==true?BrandColors.colorAccentPurple:BrandColors.colorAccent,
                         ),
                         child: TextField(
                           controller: emailAddress,
@@ -187,7 +188,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       ),
                       Theme(
                         data: ThemeData(
-                          primaryColor: BrandColors.colorAccent,
+                          primaryColor: driver==true?BrandColors.colorAccentPurple:BrandColors.colorAccent,
                         ),
                         child: TextField(
                           controller: phoneNumber,
@@ -217,7 +218,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       ),
                       Theme(
                         data: ThemeData(
-                          primaryColor: BrandColors.colorAccent,
+                          primaryColor: driver==true?BrandColors.colorAccentPurple:BrandColors.colorAccent,
                         ),
                         child: TextField(
                           controller: password,
@@ -246,7 +247,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       ),
                       Theme(
                         data: ThemeData(
-                          primaryColor: BrandColors.colorAccent,
+                          primaryColor: driver==true?BrandColors.colorAccentPurple:BrandColors.colorAccent,
                         ),
                         child: TextField(
                           controller: confirmPassword,
@@ -283,7 +284,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     // check connectivity result
                     var connectivityStatus=await Connectivity().checkConnectivity();
                     if(connectivityStatus!=ConnectivityResult.mobile && connectivityStatus!=ConnectivityResult.wifi){
-                      return scaffoldKey.currentState.showSnackBar(showSnackBar("No internet connection",context));
+                      return rootScaffoldMessengerKey.currentState.showSnackBar(showSnackBar("No internet connection",context));
                     }
 
                     register();
@@ -293,10 +294,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height*0.02,
                 ),
-                FlatButton(
+                TextButton(
                     onPressed: () {
                       Navigator.pushNamedAndRemoveUntil(context, LoginPage.id, (route) => false);
                     },
+                  style: TextButton.styleFrom(
+                      primary: Colors.black87
+                  ),
                     child: Text(
                       user1==true?"Already have a USER\'s Account!! Log In":"Already have a DRIVER\'s Account!! Log In",
                     ),

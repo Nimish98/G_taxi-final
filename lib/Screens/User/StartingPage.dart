@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:trackingapp/DataProviders/SharedPreferences.dart';
 import 'package:trackingapp/Screens/User/LoginPage.dart';
+import 'package:trackingapp/Widgets/GlobalVariables.dart';
 import 'package:trackingapp/Widgets/TaxiButton.dart';
 import 'package:trackingapp/brand_colors.dart';
 import 'package:trackingapp/Widgets/SnackBar.dart';
@@ -99,7 +100,7 @@ class _StartingPageState extends State<StartingPage> {
                     title:"Continue",
                   onPressed: () {
                     if (user == false && driver == false) {
-                      scaffoldKey.currentState.showSnackBar(showSnackBar("Please Select one of the options",context));
+                      rootScaffoldMessengerKey.currentState.showSnackBar(showSnackBar("Please Select one of the options",context));
                     }
                     else {
                       MySharedPreferences.instance.setBooleanValue("FirstTimeOpen", true);
