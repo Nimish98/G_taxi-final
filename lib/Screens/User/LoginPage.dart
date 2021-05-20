@@ -9,6 +9,7 @@ import 'package:trackingapp/DataProviders/SharedPreferences.dart';
 import 'package:trackingapp/Helpers/HelperMethods.dart';
 import 'package:trackingapp/Screens/User/MainPage.dart';
 import 'package:trackingapp/Screens/User/RegistrationPage.dart';
+import 'package:trackingapp/Widgets/GlobalVariables.dart';
 import 'package:trackingapp/Widgets/ProgressDialog.dart';
 import 'package:trackingapp/brand_colors.dart';
 import 'package:trackingapp/Widgets/TaxiButton.dart';
@@ -22,6 +23,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool driver,user1;
+  bool done = false;
 
   Position currentPosition;
   _LoginPageState(){
@@ -37,16 +39,15 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
   FirebaseAuth auth=FirebaseAuth.instance;
-  GlobalKey<ScaffoldState> scaffoldKey=GlobalKey<ScaffoldState>();
   var emailAddress=TextEditingController();
   var password=TextEditingController();
   String name;
 
- void currentLocation()async{
-    currentPosition = await Geolocator.getCurrentPosition(
+ Future<Position> currentLocation()async{
+    Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.bestForNavigation,
     );
-    print(currentPosition);
+    return position;
   }
 
   Future<void> login()async{
@@ -59,6 +60,7 @@ class _LoginPageState extends State<LoginPage> {
           );
       }
     );
+
 final UserCredential user = await auth.signInWithEmailAndPassword(
     email: emailAddress.text,
     password: password.text
@@ -69,40 +71,37 @@ final UserCredential user = await auth.signInWithEmailAndPassword(
   Exception thisEx=error;
   Navigator.pop(context);
   print(thisEx);
-  scaffoldKey.currentState.showSnackBar(showSnackBar(thisEx.toString(), context));
+  rootScaffoldMessengerKey.currentState.showSnackBar(showSnackBar(thisEx.toString(), context));
 });
 
 //check if the users data is present in the database
 
 if(user!=null && auth.currentUser.uid!=null){
-
-  DatabaseReference userRef = FirebaseDatabase.instance.reference().child(user1==true?"Users/UsersData/${user.user.uid}":"Drivers/DriversData/${user.user.uid}");
-  userRef.once().then((DataSnapshot snapshot) => {
-    if(snapshot.value!=null){
-      if(currentPosition==null){
-        Future.delayed(Duration(milliseconds: 100),(){
-          Navigator.pushNamedAndRemoveUntil(context, MainPage.id, (route) => false,arguments: currentPosition);
-        }),
-      }
-      else{
-        Navigator.pushNamedAndRemoveUntil(context, MainPage.id, (route) => false,arguments: currentPosition),
-      }
+  HelperMethods.getUserInfo();
+  DatabaseReference userRef = FirebaseDatabase.instance.reference().child(
+          user1 == true
+              ? "Users/UsersData/${user.user.uid}"
+              : "Drivers/DriversData/${user.user.uid}");
+      userRef.once().then((DataSnapshot snapshot) => {
+            if (snapshot.value != null)
+              {
+                currentLocation().then((Position position) {
+                  setState(() {
+                    currentPosition = position;
+                  });
+                }).whenComplete(() {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, MainPage.id, (route) => false,
+                      arguments: currentPosition);
+                })
+              }
+          });
     }
-  });
-}
-    HelperMethods.getUserInfo();
-  }
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    currentLocation();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -146,7 +145,7 @@ if(user!=null && auth.currentUser.uid!=null){
                     children: [
                       Theme(
                         data: ThemeData(
-                          primaryColor: BrandColors.colorAccent,
+                          primaryColor: driver==true?BrandColors.colorAccentPurple:BrandColors.colorAccent,
                         ),
                         child: TextField(
                           controller: emailAddress,
@@ -176,7 +175,7 @@ if(user!=null && auth.currentUser.uid!=null){
                       ),
                       Theme(
                         data: ThemeData(
-                          primaryColor: BrandColors.colorAccent,
+                          primaryColor: driver==true?BrandColors.colorAccentPurple:BrandColors.colorAccent,
                         ),
                         child: TextField(
                           controller: password,
@@ -212,7 +211,7 @@ if(user!=null && auth.currentUser.uid!=null){
                     // check connectivity result
                     var connectivityStatus= await Connectivity().checkConnectivity();
                     if(connectivityStatus!=ConnectivityResult.mobile && connectivityStatus!=ConnectivityResult.wifi){
-                      return scaffoldKey.currentState.showSnackBar(showSnackBar("No internet connection",context));
+                      return rootScaffoldMessengerKey.currentState.showSnackBar(showSnackBar("No internet connection",context));
                     }
 
                     login();
@@ -222,10 +221,13 @@ if(user!=null && auth.currentUser.uid!=null){
                 SizedBox(
                   height: MediaQuery.of(context).size.height*0.02,
                 ),
-                FlatButton(
+                TextButton(
                   onPressed: () {
                     Navigator.pushNamedAndRemoveUntil(context, RegistrationPage.id, (route) => false);
                   },
+                    style: TextButton.styleFrom(
+                        primary: Colors.black87
+                    ),
                     child: Text(
                         "Don\'t have an account? Sign Up here",
                     )
@@ -233,7 +235,7 @@ if(user!=null && auth.currentUser.uid!=null){
                 SizedBox(
                   height: MediaQuery.of(context).size.height*0.01,
                 ),
-                FlatButton(
+                TextButton(
                     onPressed: () {},
                     child: Text(
                       "Forgot Password",
@@ -243,6 +245,9 @@ if(user!=null && auth.currentUser.uid!=null){
                         fontSize: 15
                       ),
                     ),
+                  style: TextButton.styleFrom(
+                      primary: Colors.black87
+                  ),
                 ),
               ],
             ),

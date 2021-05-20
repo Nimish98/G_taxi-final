@@ -1,10 +1,9 @@
 import 'dart:ui';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:trackingapp/Widgets/GlobalVariables.dart';
 import 'package:trackingapp/Widgets/ProgressDialog.dart';
-import 'CarProfile.dart';
+
 class AddCar extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -418,5 +417,5 @@ class AddCarState extends State<AddCar>{
   }
 }
 Future<String> getCurrentUID() async {
-  return await FirebaseAuth.instance.currentUser.uid;
+  return currentUserInfo.uId;
 }
