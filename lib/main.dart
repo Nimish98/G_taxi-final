@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:trackingapp/DataProviders/SharedPreferences.dart';
+import 'package:trackingapp/Screens/Driver/DriverMainPage.dart';
 import 'package:trackingapp/Screens/Driver/VehiclesInfo.dart';
+import 'package:trackingapp/Screens/User/AddCar.dart';
+import 'package:trackingapp/Screens/User/LocationSearch.dart';
 import 'package:trackingapp/Screens/User/LoginPage.dart';
 import 'package:trackingapp/Screens/User/MainPage.dart';
 import 'package:trackingapp/Screens/User/RegistrationPage.dart';
+import 'package:trackingapp/Screens/User/Rentals.dart';
 import 'package:trackingapp/Screens/User/StartingPage.dart';
 import 'package:trackingapp/DataProviders/AppData.dart';
 import 'package:trackingapp/Widgets/GlobalVariables.dart';
@@ -45,16 +49,19 @@ class _MyAppState extends State<MyApp> {
           fontFamily: "Brand-Regular",
           primarySwatch: Colors.blue,
         ),
-        initialRoute: StartingPage.id,
+        initialRoute: widget.firstTimeOpen?LoginPage.id:StartingPage.id,
         routes: {
           StartingPage.id:(context) => StartingPage(),
           LoginPage.id: (context) => LoginPage(),
           RegistrationPage.id: (context) => RegistrationPage(),
           MainPage.id:(context)=>MainPage(),
           VehicleInfo.id:(context)=> VehicleInfo(),
+          AddCar.id:(context)=>AddCar(),
+          Rentals.id:(context)=>Rentals(),
+          DriverMainPage.id:(context)=>DriverMainPage(),
+          LocationSearch.id:(context)=>LocationSearch()
         },
       ),
     );
   }
 }
-// widget.firstTimeOpen?LoginPage.id:StartingPage.id

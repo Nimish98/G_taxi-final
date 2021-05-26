@@ -8,6 +8,7 @@ import 'package:trackingapp/Widgets/PredictionTile.dart';
 import 'package:trackingapp/brand_colors.dart';
 
 class SearchPage extends StatefulWidget {
+  static const String id= "SearchPage";
   const SearchPage({Key key}) : super(key: key);
 
   @override

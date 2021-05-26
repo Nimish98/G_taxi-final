@@ -1,10 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trackingapp/DataModels/Users.dart';
+import 'package:trackingapp/DataModels/Drivers.dart';
 
 String mapKey="AIzaSyDo3VloofMnq6q5TpJ_MVu2f92GCHSF-Oc";
 
-FirebaseAuth currentFirebaseUser;
+// FirebaseAuth currentFirebaseUser;
+// FirebaseAuth currentFirebaseDriver;
 Users currentUserInfo;
+Drivers currentDriverInfo;
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();

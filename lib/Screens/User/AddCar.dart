@@ -5,6 +5,7 @@ import 'package:trackingapp/Widgets/GlobalVariables.dart';
 import 'package:trackingapp/Widgets/ProgressDialog.dart';
 
 class AddCar extends StatefulWidget{
+  static const String id= "AddCar";
   @override
   State<StatefulWidget> createState() {
     return AddCarState();
@@ -52,7 +53,6 @@ class AddCarState extends State<AddCar>{
     );
   }
   @override
-  // final formKey = new GlobalKey<FormState>();
 
   Widget build(BuildContext context) {
     return Scaffold(

@@ -50,6 +50,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
 
    void setupPositionLocator() async{
      String address = await HelperMethods.findCoordinatesAddress(currentPosition,context);
+     LatLng pos = LatLng(currentPosition.latitude,currentPosition.longitude);
+     mapController.animateCamera(CameraUpdate.newLatLng(pos));
    }
 
 
@@ -194,7 +196,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
               _controller.complete(controller);
               mapController=controller;
               setState(() {
-                mapBottomPadding=MediaQuery.of(context).size.height*0.37;
+                mapBottomPadding = MediaQuery.of(context).size.height*0.37;
                 currentPosition = coordinate;
               });
 
@@ -294,7 +296,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
                       ),
                       GestureDetector(
                         onTap: () async{
-                          var response = await Navigator.push(context, MaterialPageRoute(builder:(context)=>SearchPage()));
+                          var response = await Navigator.pushNamed(context, SearchPage.id);
                           if(response=="getDirection"){
                             showDetailsSheet();
                           }

@@ -10,18 +10,39 @@ import 'package:trackingapp/DataProviders/AppData.dart';
 import 'package:trackingapp/Helpers/RequestHelper.dart';
 import 'package:trackingapp/Widgets/GlobalVariables.dart';
 import 'package:trackingapp/DataModels/Address.dart';
+import 'package:trackingapp/DataModels/Drivers.dart';
 
 class HelperMethods{
 
+  static Future<Position> currentLocation()async{
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.bestForNavigation,
+    );
+    return position;
+  }
+
   static void getUserInfo() async{
 
-    currentFirebaseUser = FirebaseAuth.instance;
+    FirebaseAuth currentFirebaseUser = FirebaseAuth.instance;
     String userId = currentFirebaseUser.currentUser.uid;
     DatabaseReference userRef = FirebaseDatabase.instance.reference().child("Users/UsersData/$userId");
     userRef.once().then((DataSnapshot snapShot) {
       if(snapShot.value!=null){
         currentUserInfo = Users.fromSnapshot(snapShot);
         print(currentUserInfo.name);
+      }
+    });
+  }
+
+  static void getDriverInfo() async{
+
+     FirebaseAuth currentFirebaseDriver = FirebaseAuth.instance;
+    String driverId = currentFirebaseDriver.currentUser.uid;
+    DatabaseReference userRef = FirebaseDatabase.instance.reference().child("Drivers/DriversData/$driverId");
+    userRef.once().then((DataSnapshot snapShot) {
+      if(snapShot.value!=null){
+        currentDriverInfo = Drivers.fromSnapshot(snapShot);
+        print(currentDriverInfo.name);
       }
     });
   }
