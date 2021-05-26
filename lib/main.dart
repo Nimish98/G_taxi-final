@@ -11,6 +11,7 @@ import 'package:trackingapp/Screens/User/LoginPage.dart';
 import 'package:trackingapp/Screens/User/MainPage.dart';
 import 'package:trackingapp/Screens/User/RegistrationPage.dart';
 import 'package:trackingapp/Screens/User/Rentals.dart';
+import 'package:trackingapp/Screens/User/SearchPage.dart';
 import 'package:trackingapp/Screens/User/StartingPage.dart';
 import 'package:trackingapp/DataProviders/AppData.dart';
 import 'package:trackingapp/Widgets/GlobalVariables.dart';
@@ -59,7 +60,8 @@ class _MyAppState extends State<MyApp> {
           AddCar.id:(context)=>AddCar(),
           Rentals.id:(context)=>Rentals(),
           DriverMainPage.id:(context)=>DriverMainPage(),
-          LocationSearch.id:(context)=>LocationSearch()
+          LocationSearch.id:(context)=>LocationSearch(),
+          SearchPage.id:(context)=>SearchPage(),
         },
       ),
     );
