@@ -1,10 +1,10 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:trackingapp/Screens/User/LoginPage.dart';
-import 'package:trackingapp/Widgets/GlobalVariables.dart';
-import 'package:trackingapp/Widgets/ProgressDialog.dart';
-import 'package:trackingapp/Widgets/SnackBar.dart';
-import 'package:trackingapp/Widgets/TaxiButton.dart';
+import 'package:trackingapp/Widgets/User/GlobalVariables.dart';
+import 'package:trackingapp/Widgets/User/ProgressDialog.dart';
+import 'package:trackingapp/Widgets/User/SnackBar.dart';
+import 'package:trackingapp/Widgets/User/TaxiButton.dart';
 import 'package:trackingapp/brand_colors.dart';
 
 class VehicleInfo extends StatefulWidget {
@@ -160,15 +160,6 @@ class _VehicleInfoState extends State<VehicleInfo> {
                       title: "PROCEED",
                       bgColor: BrandColors.colorAccentPurple,
                       onPressed: (){
-                        showDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (BuildContext context){
-                              return ProgressDialog(
-                                status: "Please Wait...",
-                              );
-                            }
-                        );
                         if(carModelController.text.length<3){
                           return rootScaffoldMessengerKey.currentState.showSnackBar(showSnackBar("Please provide a valid car model", context));
                         }
@@ -178,6 +169,15 @@ class _VehicleInfoState extends State<VehicleInfo> {
                         if(vehicleNumberController.text.length<3){
                           return rootScaffoldMessengerKey.currentState.showSnackBar(showSnackBar("Please provide a valid vehicle number", context));
                         }
+                        showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (BuildContext context){
+                              return ProgressDialog(
+                                status: "Please Wait...",
+                              );
+                            }
+                        );
                         updateProfile();
                       },
                     )

@@ -8,11 +8,11 @@ import 'package:trackingapp/DataProviders/SharedPreferences.dart';
 import 'package:trackingapp/Helpers/HelperMethods.dart';
 import 'package:trackingapp/Screens/User/LocationSearch.dart';
 import 'package:trackingapp/Screens/User/RegistrationPage.dart';
-import 'package:trackingapp/Widgets/GlobalVariables.dart';
-import 'package:trackingapp/Widgets/ProgressDialog.dart';
+import 'package:trackingapp/Widgets/User/GlobalVariables.dart';
+import 'package:trackingapp/Widgets/User/ProgressDialog.dart';
 import 'package:trackingapp/brand_colors.dart';
-import 'package:trackingapp/Widgets/TaxiButton.dart';
-import 'package:trackingapp/Widgets/SnackBar.dart';
+import 'package:trackingapp/Widgets/User/TaxiButton.dart';
+import 'package:trackingapp/Widgets/User/SnackBar.dart';
 
 class LoginPage extends StatefulWidget {
   static const String id= "loginPage";

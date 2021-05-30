@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -8,7 +10,7 @@ import 'package:trackingapp/DataModels/DirectionDetails.dart';
 import 'package:trackingapp/DataModels/Users.dart';
 import 'package:trackingapp/DataProviders/AppData.dart';
 import 'package:trackingapp/Helpers/RequestHelper.dart';
-import 'package:trackingapp/Widgets/GlobalVariables.dart';
+import 'package:trackingapp/Widgets/User/GlobalVariables.dart';
 import 'package:trackingapp/DataModels/Address.dart';
 import 'package:trackingapp/DataModels/Drivers.dart';
 
@@ -89,7 +91,7 @@ class HelperMethods{
    }
 
    static int estimateFares(DirectionDetails direction){
-   /// per km Rs-8
+    /// per km Rs-8
      /// per minute Rs-6
      /// base fare Rs 40
      double baseFare = 40;
@@ -98,5 +100,13 @@ class HelperMethods{
      double totalFare= baseFare+distanceFare+timeFare;
 
      return totalFare.truncate();
+   }
+
+   static double generateRandomNumber(int max){
+
+    var randomGenerator = Random();
+    int randInt = randomGenerator.nextInt(max);
+    return randInt.toDouble();
+
    }
 }

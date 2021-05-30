@@ -14,7 +14,7 @@ import 'package:trackingapp/Screens/User/Rentals.dart';
 import 'package:trackingapp/Screens/User/SearchPage.dart';
 import 'package:trackingapp/Screens/User/StartingPage.dart';
 import 'package:trackingapp/DataProviders/AppData.dart';
-import 'package:trackingapp/Widgets/GlobalVariables.dart';
+import 'package:trackingapp/Widgets/User/GlobalVariables.dart';
 
 void main() async{
   bool firstTimeOpen = false;
@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
           fontFamily: "Brand-Regular",
           primarySwatch: Colors.blue,
         ),
-        initialRoute: widget.firstTimeOpen?LoginPage.id:StartingPage.id,
+        initialRoute: StartingPage.id,
         routes: {
           StartingPage.id:(context) => StartingPage(),
           LoginPage.id: (context) => LoginPage(),
@@ -67,3 +67,4 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+// widget.firstTimeOpen?LoginPage.id:
