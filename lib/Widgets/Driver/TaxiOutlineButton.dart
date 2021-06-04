@@ -15,7 +15,7 @@ class TaxiOutlineButton extends StatelessWidget {
     return OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
-          side: BorderSide(color: color),
+          side: BorderSide(color: textColor),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25.0),
           ),

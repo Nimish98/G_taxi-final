@@ -138,7 +138,7 @@ if(user!=null && auth.currentUser.uid!=null){
                         child: TextField(
                           controller: emailAddress,
                           keyboardType: TextInputType.emailAddress,
-                          keyboardAppearance: Brightness.dark,
+                          // keyboardAppearance: Brightness.dark,
                           onEditingComplete: ()=> FocusScope.of(context).nextFocus(),
                           // expands: true,
                           selectionHeightStyle: BoxHeightStyle.tight,

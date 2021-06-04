@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:trackingapp/Helpers/PushNotificationService.dart';
 import 'package:trackingapp/Widgets/Driver/ConfirmSheet.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,18 @@ class _HomeTabState extends State<HomeTab> {
     mapController.animateCamera(CameraUpdate.newLatLng(pos));
   }
 
+  void notificationService()async{
+    PushNotificationService pushNotificationService = PushNotificationService();
+    pushNotificationService.initialize(context);
+    pushNotificationService.getToken();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    notificationService();
+  }
   @override
   Widget build(BuildContext context) {
     return Stack(

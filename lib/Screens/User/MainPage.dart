@@ -910,10 +910,11 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   void createRideRequest() {
     rideRef =
         FirebaseDatabase.instance.reference().child("Ride Request").push();
+    print(rideRef);
 
     var pickUp = Provider.of<AppData>(context, listen: false).pickupAddress;
     var destination =
-        Provider.of<AppData>(context, listen: false).pickupAddress;
+        Provider.of<AppData>(context, listen: false).destinationAddress;
 
     Map pickUpMap = {
       "latitude": pickUp.latitude.toString(),

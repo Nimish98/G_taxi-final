@@ -18,7 +18,7 @@ class HelperMethods{
 
   static Future<Position> currentLocation()async{
     Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.bestForNavigation,
+      desiredAccuracy: LocationAccuracy.high,
     );
     return position;
   }
