@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -90,13 +91,13 @@ class HelperMethods{
     return directionDetails;
    }
 
-   static int estimateFares(DirectionDetails direction){
+   static int estimateFares(DirectionDetails direction, int durationValue){
     /// per km Rs-8
      /// per minute Rs-6
      /// base fare Rs 40
      double baseFare = 40;
      double distanceFare = (direction.distanceValue/1000)*8;
-     double timeFare = (direction.durationValue/60)*6;
+     double timeFare = (durationValue/60)*6;
      double totalFare= baseFare+distanceFare+timeFare;
 
      return totalFare.truncate();
@@ -109,4 +110,15 @@ class HelperMethods{
     return randInt.toDouble();
 
    }
+
+   static void disableHomeTabLocationUpdates(){
+    homeTabPositionStream.pause();
+    Geofire.removeLocation(currentDriverInfo.uId);
+   }
+
+  static void enableHomeTabLocationUpdates(){
+    homeTabPositionStream.resume();
+    Geofire.setLocation(currentDriverInfo.uId,currentDriverInfo.currentPosition.longitude,currentDriverInfo.currentPosition.longitude);
+  }
+
 }

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:provider/provider.dart';
@@ -49,7 +48,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   Set<Polyline> polyLinesSet = {};
   Set<Marker> markers = {};
   Set<Circle> circles = {};
-  Position currentPosition;
 
   DirectionDetails tripDirectionDetails;
 
@@ -112,8 +110,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   void setupPositionLocator() async {
     String address =
-        await HelperMethods.findCoordinatesAddress(currentPosition, context);
-    LatLng pos = LatLng(currentPosition.latitude, currentPosition.longitude);
+        await HelperMethods.findCoordinatesAddress(currentUserInfo.currentPosition, context);
+    LatLng pos = LatLng(currentUserInfo.currentPosition.latitude,currentUserInfo.currentPosition.longitude);
     mapController.animateCamera(CameraUpdate.newLatLng(pos));
     startGeoFireListener();
   }
@@ -155,7 +153,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     searchDetailSheet = MediaQuery.of(context).size.height * 0.36;
-    final Position coordinate = ModalRoute.of(context).settings.arguments;
     createMarker();
     return Scaffold(
       key: scaffoldKey,
@@ -273,7 +270,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               top: MediaQuery.of(context).size.height * 0.41,
             ),
             initialCameraPosition: CameraPosition(
-              target: LatLng(coordinate.latitude, coordinate.longitude),
+              target: LatLng(currentUserInfo.currentPosition.latitude,currentUserInfo.currentPosition.longitude),
               zoom: 13,
             ),
             polylines: polyLinesSet,
@@ -284,7 +281,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               mapController = controller;
               setState(() {
                 mapBottomPadding = MediaQuery.of(context).size.height * 0.37;
-                currentPosition = coordinate;
               });
 
               setupPositionLocator();
@@ -557,16 +553,16 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.40,
                           ),
-                          Text(
-                            "\u20B9" +
-                                (tripDirectionDetails != null
-                                    ? "${HelperMethods.estimateFares(tripDirectionDetails)}"
-                                    : ""),
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: "Brand-Bold",
-                            ),
-                          ),
+                          // Text(
+                          //   "\u20B9" +
+                          //       (tripDirectionDetails != null
+                          //           ? "${HelperMethods.estimateFares(tripDirectionDetails)}"
+                          //           : ""),
+                          //   style: TextStyle(
+                          //     fontSize: 18,
+                          //     fontFamily: "Brand-Bold",
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -832,7 +828,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     
     Geofire.initialize("driversAvailable");
 
-    Geofire.queryAtLocation(currentPosition.latitude, currentPosition.longitude, 10).listen((map) {
+    Geofire.queryAtLocation(currentUserInfo.currentPosition.latitude, currentUserInfo.currentPosition.longitude, 10).listen((map) {
       print(map);
       if (map != null) {
         var callBack = map['callBack'];

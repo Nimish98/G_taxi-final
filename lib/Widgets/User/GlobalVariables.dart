@@ -13,3 +13,5 @@ Users currentUserInfo;
 Drivers currentDriverInfo;
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 StreamSubscription<Position> homeTabPositionStream;
+StreamSubscription<Position> ridePositionStream;
+// Position currentPosition;

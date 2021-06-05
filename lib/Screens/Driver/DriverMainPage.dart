@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
-import 'package:geolocator/geolocator.dart';
 import 'package:trackingapp/Screens/Driver/TabBar/EarningsTab.dart';
 import 'package:trackingapp/Screens/Driver/TabBar/HomeTab.dart';
 import 'package:trackingapp/Screens/Driver/TabBar/ProfileTab.dart';
 import 'package:trackingapp/Screens/Driver/TabBar/RatingsTab.dart';
+import 'package:trackingapp/Widgets/User/GlobalVariables.dart';
 import 'package:trackingapp/brand_colors.dart';
 
 class DriverMainPage extends StatefulWidget {
@@ -41,7 +41,7 @@ class _DriverMainPageState extends State<DriverMainPage> with SingleTickerProvid
   }
   @override
   Widget build(BuildContext context) {
-    final Position coordinate = ModalRoute.of(context).settings.arguments;
+    // final Position coordinate = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
@@ -75,7 +75,7 @@ class _DriverMainPageState extends State<DriverMainPage> with SingleTickerProvid
         physics: NeverScrollableScrollPhysics(),
         controller: tabController,
         children: [
-          HomeTab(coordinate: coordinate,),
+          HomeTab(coordinate: currentDriverInfo.currentPosition,),
           EarningsTab(),
           RatingsTab(),
           ProfileTab()

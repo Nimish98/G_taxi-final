@@ -3,9 +3,12 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trackingapp/DataModels/TripDetails.dart';
+import 'package:trackingapp/Helpers/HelperMethods.dart';
+import 'package:trackingapp/Screens/Driver/NewTripPage.dart';
 import 'package:trackingapp/Widgets/Driver/TaxiOutlineButton.dart';
 import 'package:trackingapp/Widgets/User/GlobalVariables.dart';
 import 'package:trackingapp/Widgets/User/ProgressDialog.dart';
+import 'package:trackingapp/Widgets/User/SnackBar.dart';
 import 'package:trackingapp/brand_colors.dart';
 
 class NotificationDialog extends StatelessWidget {
@@ -146,7 +149,6 @@ class NotificationDialog extends StatelessWidget {
                           onPressed: (){
                             assetAudioPlayer.stop();
                             checkAvailability(context);
-                            Navigator.pop(context);
                           }
                       ),
                     ),
@@ -175,8 +177,10 @@ class NotificationDialog extends StatelessWidget {
         barrierDismissible: false,
         context: context,
         builder: (BuildContext context){
-          return ProgressDialog(
-            status: "Fetching Please Wait...",
+          return StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState)=>ProgressDialog(
+              status: "Fetching Please Wait...",
+            ),
           );
         }
     );
@@ -185,6 +189,7 @@ class NotificationDialog extends StatelessWidget {
     newRideRef.once().then((DataSnapshot snapshot) {
 
       Navigator.pop(context);
+      Navigator.pop(context);
 
       String thisRideId =  "";
       if(snapshot.value!=null){
@@ -192,21 +197,24 @@ class NotificationDialog extends StatelessWidget {
         print(thisRideId);
       }
       else{
-        print("Ride Not Found");
+        rootScaffoldMessengerKey.currentState.showSnackBar(showSnackBar("Ride Not Found", context));
       }
       if(thisRideId == tripDetails.rideId){
         newRideRef.update({
           "new_trip":"accepted",
         });
+        HelperMethods.disableHomeTabLocationUpdates();
+        rootScaffoldMessengerKey.currentState.showSnackBar(showSnackBar("Ride Accepted", context));
+        Navigator.pushNamed(context, NewTripPage.id, arguments: tripDetails);
       }
       else if(thisRideId == "cancelled"){
-        print("Ride has been cancelled");
+        rootScaffoldMessengerKey.currentState.showSnackBar(showSnackBar("Ride has been Cancelled", context));
       }
       else if(thisRideId == "timeout"){
-        print("Ride has TimeOut");
+        rootScaffoldMessengerKey.currentState.showSnackBar(showSnackBar("Ride has been TimeOut", context));
       }
       else{
-        print("Ride Not Found");
+        rootScaffoldMessengerKey.currentState.showSnackBar(showSnackBar("Ride Not Found", context));
       }
 
     });

@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:trackingapp/Helpers/HelperMethods.dart';
 import 'package:trackingapp/Screens/Driver/DriverMainPage.dart';
 import 'package:trackingapp/Screens/User/MainPage.dart';
+import 'package:trackingapp/Widgets/User/GlobalVariables.dart';
 
 class LocationSearch extends StatefulWidget {
   static const String id= "LocationSearchPage";
@@ -13,7 +14,6 @@ class LocationSearch extends StatefulWidget {
 }
 
 class _LocationSearchState extends State<LocationSearch> {
-  Position currentPosition;
   bool user;
 
   @override
@@ -24,14 +24,14 @@ class _LocationSearchState extends State<LocationSearch> {
        user = ModalRoute.of(context).settings.arguments;
     });
     HelperMethods.currentLocation().then((Position position) {
-      currentPosition = position;
       if(user==true) {
+        currentUserInfo.currentPosition = position;
         Navigator.pushNamedAndRemoveUntil(
-            context, MainPage.id, (route) => false,
-            arguments: currentPosition);
+            context, MainPage.id, (route) => false,);
       }
       else{
-        Navigator.pushNamedAndRemoveUntil(context, DriverMainPage.id, (route) => false,arguments: currentPosition);
+        currentDriverInfo.currentPosition = position;
+        Navigator.pushNamedAndRemoveUntil(context, DriverMainPage.id, (route) => false,);
       }
     });
   }
@@ -39,19 +39,22 @@ class _LocationSearchState extends State<LocationSearch> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            Image.asset("images/location.gif",height: 500,width: 500,),
-            Text(
-                "Please Wait while we fetch your current location...",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Color(0xFF334b5f),
-                fontSize: 22,
-                fontFamily: "Brand-Bold",
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            children: [
+              Image.asset("images/location.gif",height: 500,width: 500,),
+              Text(
+                  "Please Wait while we fetch your current location...",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Color(0xFF334b5f),
+                  fontSize: 22,
+                  fontFamily: "Brand-Bold",
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

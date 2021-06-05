@@ -131,7 +131,9 @@ class PushNotificationService{
         double destinationLat = double.parse(snapshot.value["destination"]["latitude"].toString());
         double destinationLng = double.parse(snapshot.value["destination"]["longitude"].toString());
         String destinationAddress = snapshot.value["destination_address"].toString();
-        String paymentMethod = snapshot.value["payment_method"];
+        String paymentMethod = snapshot.value["payment"];
+        String riderName = snapshot.value["rider_name"];
+        String phoneNumber = snapshot.value["phone_number"];
 
         TripDetails tripDetails = TripDetails();
         tripDetails.rideId = rideId;
@@ -140,6 +142,8 @@ class PushNotificationService{
         tripDetails.paymentMethod = paymentMethod;
         tripDetails.pickUp = LatLng(pickUpLat,pickUpLng);
         tripDetails.destination = LatLng(destinationLat,destinationLng);
+        tripDetails.riderName = riderName;
+        tripDetails.riderPhone = phoneNumber;
 
         showDialog(
             barrierDismissible: false,
