@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:trackingapp/DataModels/DirectionDetails.dart';
 import 'package:trackingapp/DataProviders/AppData.dart';
 import 'package:trackingapp/Helpers/HelperMethods.dart';
+import 'package:trackingapp/Screens/User/Profile.dart';
 import 'package:trackingapp/Styles/Styles.dart';
 import 'package:trackingapp/Widgets/GlobalVariables.dart';
 import 'package:trackingapp/Widgets/ProgressDialog.dart';
@@ -118,7 +119,11 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
                                 SizedBox(
                                   height: MediaQuery.of(context).size.height*0.005,
                                 ),
-                                Text("View Profile"),
+                                GestureDetector(
+                                  onTap: (){
+                                    Navigator.push(context, MaterialPageRoute(builder:(context)=>Profile()));
+                                  },
+                                    child: Text("View Profile")),
                               ],
                             ),
                           ),
