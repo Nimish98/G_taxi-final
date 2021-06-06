@@ -17,7 +17,10 @@ import 'package:trackingapp/Helpers/HelperMethods.dart';
 import 'package:trackingapp/Screens/User/LoginPage.dart';
 import 'package:trackingapp/Styles/Styles.dart';
 import 'package:trackingapp/Widgets/User/GlobalVariables.dart';
+import 'package:trackingapp/Widgets/User/NoDriverDialog.dart';
 import 'package:trackingapp/Widgets/User/ProgressDialog.dart';
+import 'package:trackingapp/Widgets/User/RideVariables.dart';
+import 'package:trackingapp/Widgets/User/SnackBar.dart';
 import 'package:trackingapp/Widgets/User/TaxiButton.dart';
 import 'package:trackingapp/brand_colors.dart';
 import 'package:trackingapp/Screens/User/SearchPage.dart';
@@ -48,12 +51,16 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   Set<Polyline> polyLinesSet = {};
   Set<Marker> markers = {};
   Set<Circle> circles = {};
+  List<NearbyDriver> availableDrivers;
 
   DirectionDetails tripDirectionDetails;
 
   DatabaseReference rideRef;
 
   bool nearbyDriversKeyLoaded = false;
+  int driverRequestTimeOut = 10;
+
+  String appState = "NORMAL";
 
   void signOut() {
     showDialog(
@@ -599,7 +606,11 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                         title: "REQUEST CAB",
                         bgColor: BrandColors.colorGreen,
                         onPressed: () {
+                          appState = "REQUESTING";
                           showRequestingSheet();
+                          availableDrivers = FireHelper.nearbyDriverList;
+                          print("234567"+"$availableDrivers");
+                          findDrivers();
                         },
                       ),
                     ),
@@ -850,7 +861,10 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
           case Geofire.onKeyExited:
 
-            FireHelper.removedFromList(map["key"]);
+            if(FireHelper.nearbyDriverList.length>0){
+              print("Hello");
+              FireHelper.removedFromList(map["key"]);
+            }
             updateDriversOnMap();
             break;
 
@@ -939,6 +953,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   void cancelRequest() {
     rideRef.remove();
+    appState = "NORMAL";
   }
 
   resetApp() {
@@ -953,5 +968,86 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       drawerCanOpen = true;
     });
     setupPositionLocator();
+  }
+
+  void noDriverFound(){
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context){
+          return NoDriverDialog();
+        }
+    );
+  }
+
+  void findDrivers(){
+    print(availableDrivers.length);
+    if(availableDrivers.length == 0){
+      cancelRequest();
+      noDriverFound();
+      resetApp();
+    }
+    else{
+      var driver = availableDrivers[0];
+      notifyDrivers(driver);
+      availableDrivers.removeAt(0);
+      print(driver.key);
+    }
+  }
+
+  void notifyDrivers(NearbyDriver driver){
+    DatabaseReference driverTripRef = FirebaseDatabase.instance.reference().child("Drivers/DriversData/${driver.key}/new_trip");
+    driverTripRef.set(rideRef.key);
+
+    ///Get and Notify Driver using Token
+    DatabaseReference tokenRef = FirebaseDatabase.instance.reference().child("Drivers/DriversData/${driver.key}/token");
+    tokenRef.once().then((DataSnapshot snapshot) {
+      if(snapshot.value!=null){
+        String token = snapshot.value.toString();
+        ///Send push notification to selected driver
+        HelperMethods.sendNotifications(token, context, rideRef.key);
+      }
+    });
+    const oneSecTick = Duration(seconds: 1);
+    var timer = Timer.periodic(oneSecTick, (timer){
+
+      ///Stop timer when Ride request is cancelled
+      if(appState != "REQUESTING"){
+        driverTripRef.set("cancelled");
+        driverTripRef.onDisconnect();
+        timer.cancel();
+        driverRequestTimeOut = 10;
+      }
+
+      driverRequestTimeOut--;
+      print("Hello"+ "$driverRequestTimeOut");
+
+      /// A value event listener for driver accepting trip request
+
+      driverTripRef.onValue.listen((event) {
+        /// Confirms that driver has clicked accepted for the new trip request
+        if(event.snapshot.value.toString() == "accepted"){
+
+          driverTripRef.onDisconnect();
+          timer.cancel();
+          driverRequestTimeOut = 10;
+        }
+      });
+
+      if(driverRequestTimeOut==0){
+
+        ///Informs Driver that Request Has TimedOut
+
+        driverTripRef.set("timeout");
+        driverTripRef.onDisconnect();
+        driverRequestTimeOut = 10;
+        timer.cancel();
+
+        ///Select New Driver
+        print("Good Morning");
+        findDrivers();
+
+      }
+    });
   }
 }

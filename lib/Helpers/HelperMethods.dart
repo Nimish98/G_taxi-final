@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'dart:math';
-
+import 'package:http/http.dart' as http;
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -121,4 +122,33 @@ class HelperMethods{
     Geofire.setLocation(currentDriverInfo.uId,currentDriverInfo.currentPosition.longitude,currentDriverInfo.currentPosition.longitude);
   }
 
+  static void sendNotifications(String token, context, String rideId) async{
+
+    var destination = Provider.of<AppData>(context,listen: false).destinationAddress;
+
+    try {
+      http.Response response = await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': serverKey,
+        },
+        body: jsonEncode({
+          'to': token,
+          'data': {
+            'ride_id': rideId,
+          },
+          'notification': {
+            'title': 'NEW TRIP REQUEST',
+            'body': 'Destination ${destination.placeName}',
+          },
+        }),
+      );
+      print(jsonDecode(response.body));
+      print('FCM request for device sent!');
+    } catch (e) {
+      print(e);
+    }
+
+  }
 }
