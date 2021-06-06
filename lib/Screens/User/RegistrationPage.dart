@@ -5,12 +5,13 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trackingapp/DataProviders/SharedPreferences.dart';
+import 'package:trackingapp/Screens/Driver/VehiclesInfo.dart';
 import 'package:trackingapp/Screens/User/LoginPage.dart';
-import 'package:trackingapp/Widgets/GlobalVariables.dart';
-import 'package:trackingapp/Widgets/ProgressDialog.dart';
-import 'package:trackingapp/Widgets/TaxiButton.dart';
+import 'package:trackingapp/Widgets/User/GlobalVariables.dart';
+import 'package:trackingapp/Widgets/User/ProgressDialog.dart';
+import 'package:trackingapp/Widgets/User/TaxiButton.dart';
 import 'package:trackingapp/brand_colors.dart';
-import 'package:trackingapp/Widgets/SnackBar.dart';
+import 'package:trackingapp/Widgets/User/SnackBar.dart';
 
 
 class RegistrationPage extends StatefulWidget {
@@ -43,6 +44,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   var password=TextEditingController();
   var confirmPassword= TextEditingController();
   bool passwordCheck;
+  String driverId;
 
   final FirebaseAuth auth=FirebaseAuth.instance;
 
@@ -77,7 +79,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
          "Email Address": emailAddress.text,
          "Password": password.text,
        });
-   Navigator.pushNamedAndRemoveUntil(context, LoginPage.id, (route) => false);
+   if(user1==true){
+     Navigator.pushNamedAndRemoveUntil(context, LoginPage.id, (route) => false);
+   }
+   else{
+     driverId = user.user.uid;
+     Navigator.pushNamedAndRemoveUntil(context, VehicleInfo.id, (route) => false,arguments: driverId);
+   }
   }
   }
 

@@ -4,16 +4,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:trackingapp/DataProviders/SharedPreferences.dart';
 import 'package:trackingapp/Helpers/HelperMethods.dart';
-import 'package:trackingapp/Screens/User/MainPage.dart';
+import 'package:trackingapp/Screens/User/LocationSearch.dart';
 import 'package:trackingapp/Screens/User/RegistrationPage.dart';
-import 'package:trackingapp/Widgets/GlobalVariables.dart';
-import 'package:trackingapp/Widgets/ProgressDialog.dart';
+import 'package:trackingapp/Widgets/User/GlobalVariables.dart';
+import 'package:trackingapp/Widgets/User/ProgressDialog.dart';
 import 'package:trackingapp/brand_colors.dart';
-import 'package:trackingapp/Widgets/TaxiButton.dart';
-import 'package:trackingapp/Widgets/SnackBar.dart';
+import 'package:trackingapp/Widgets/User/TaxiButton.dart';
+import 'package:trackingapp/Widgets/User/SnackBar.dart';
 
 class LoginPage extends StatefulWidget {
   static const String id= "loginPage";
@@ -25,7 +24,6 @@ class _LoginPageState extends State<LoginPage> {
   bool driver,user1;
   bool done = false;
 
-  Position currentPosition;
   _LoginPageState(){
     MySharedPreferences.instance.getBooleanValue("Driver").then((value) =>
       setState(() {
@@ -42,13 +40,6 @@ class _LoginPageState extends State<LoginPage> {
   var emailAddress=TextEditingController();
   var password=TextEditingController();
   String name;
-
- Future<Position> currentLocation()async{
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.bestForNavigation,
-    );
-    return position;
-  }
 
   Future<void> login()async{
     showDialog(
@@ -77,7 +68,12 @@ final UserCredential user = await auth.signInWithEmailAndPassword(
 //check if the users data is present in the database
 
 if(user!=null && auth.currentUser.uid!=null){
-  HelperMethods.getUserInfo();
+  if(user1==true){
+    HelperMethods.getUserInfo();
+  }
+  else{
+    HelperMethods.getDriverInfo();
+  }
   DatabaseReference userRef = FirebaseDatabase.instance.reference().child(
           user1 == true
               ? "Users/UsersData/${user.user.uid}"
@@ -85,15 +81,7 @@ if(user!=null && auth.currentUser.uid!=null){
       userRef.once().then((DataSnapshot snapshot) => {
             if (snapshot.value != null)
               {
-                currentLocation().then((Position position) {
-                  setState(() {
-                    currentPosition = position;
-                  });
-                }).whenComplete(() {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, MainPage.id, (route) => false,
-                      arguments: currentPosition);
-                })
+                Navigator.pushNamedAndRemoveUntil(context, LocationSearch.id, (route) => false,arguments: user1)
               }
           });
     }
@@ -150,7 +138,7 @@ if(user!=null && auth.currentUser.uid!=null){
                         child: TextField(
                           controller: emailAddress,
                           keyboardType: TextInputType.emailAddress,
-                          keyboardAppearance: Brightness.dark,
+                          // keyboardAppearance: Brightness.dark,
                           onEditingComplete: ()=> FocusScope.of(context).nextFocus(),
                           // expands: true,
                           selectionHeightStyle: BoxHeightStyle.tight,

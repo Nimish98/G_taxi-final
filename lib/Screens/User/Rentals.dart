@@ -5,6 +5,7 @@ import 'AddCar.dart';
 import 'CarProfile.dart';
 
 class Rentals extends StatefulWidget{
+  static const String id= "Rentals";
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -39,7 +40,7 @@ class RentalsState extends State<Rentals>{
                           color: Colors.black87,),),
                       SizedBox(width: MediaQuery.of(context).size.width-160,),
                       FloatingActionButton(onPressed: (){
-                        Navigator.push(context,MaterialPageRoute(builder: (context)=> AddCar()));
+                        Navigator.pushNamed(context, AddCar.id);
                       },
                         tooltip: "Press to add your Car",
                         elevation: 20.0,
