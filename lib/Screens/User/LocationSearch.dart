@@ -26,6 +26,7 @@ class _LocationSearchState extends State<LocationSearch> {
     HelperMethods.currentLocation().then((Position position) {
       if(user==true) {
         currentUserInfo.currentPosition = position;
+        print(user);
         Navigator.pushNamedAndRemoveUntil(
             context, MainPage.id, (route) => false,);
       }
