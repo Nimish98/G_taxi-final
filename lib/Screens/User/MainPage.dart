@@ -14,9 +14,9 @@ import 'package:trackingapp/DataProviders/AppData.dart';
 import 'package:trackingapp/Helpers/HelperMethods.dart';
 import 'package:trackingapp/Screens/User/Profile.dart';
 import 'package:trackingapp/Styles/Styles.dart';
-import 'package:trackingapp/Widgets/GlobalVariables.dart';
-import 'package:trackingapp/Widgets/ProgressDialog.dart';
-import 'package:trackingapp/Widgets/TaxiButton.dart';
+import 'package:trackingapp/Widgets/User/GlobalVariables.dart';
+import 'package:trackingapp/Widgets/User/ProgressDialog.dart';
+import 'package:trackingapp/Widgets/User/TaxiButton.dart';
 import 'package:trackingapp/brand_colors.dart';
 import 'package:trackingapp/Screens/User/SearchPage.dart';
 

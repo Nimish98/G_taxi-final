@@ -31,5 +31,4 @@ class Drivers{
     carColour = snapshot.value["vehicle_details"]["car_colour"];
     vehicleNumber = snapshot.value["vehicle_details"]["vehicle_number"];
   }
-
 }
