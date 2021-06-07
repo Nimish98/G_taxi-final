@@ -112,13 +112,11 @@ class PushNotificationService{
         tripDetails.destination = LatLng(destinationLat,destinationLng);
         tripDetails.riderName = riderName;
         tripDetails.riderPhone = phoneNumber;
-
         showDialog(
             barrierDismissible: false,
             context: context,
             builder: (BuildContext context)=>NotificationDialog(tripDetails: tripDetails,assetAudioPlayer: assetAudioPlayer,)
         );
-
       }
     });
   }
