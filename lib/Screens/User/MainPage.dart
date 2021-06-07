@@ -19,6 +19,7 @@ import 'package:trackingapp/Styles/Styles.dart';
 import 'package:trackingapp/Widgets/User/CollectPaymentDialogUser.dart';
 import 'package:trackingapp/Widgets/User/GlobalVariables.dart';
 import 'package:trackingapp/Widgets/User/NoDriverDialog.dart';
+import 'package:trackingapp/Widgets/User/PaymentScreen.dart';
 import 'package:trackingapp/Widgets/User/ProgressDialog.dart';
 import 'package:trackingapp/Widgets/User/TaxiButton.dart';
 import 'package:trackingapp/brand_colors.dart';
@@ -240,6 +241,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                     "Payments",
                     style: kDrawerItemStyle,
                   ),
+                  onTap: (){
+                    Navigator.pushNamed(context, PaymentScreen.id);
+                  },
                 ),
                 ListTile(
                   leading: Icon(OMIcons.history),
@@ -1163,7 +1167,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
       if(event.snapshot.value["driver_phone"]!=null){
         setState(() {
-          driverCarDetails = event.snapshot.value["driver_phone"].toString();
+          driverPhone = event.snapshot.value["driver_phone"].toString();
         });
       }
 
