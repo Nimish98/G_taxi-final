@@ -225,6 +225,8 @@ class HelperMethods {
               history);
 
           print(history.pickup);
+          print(history.destination);
+          print(history.fares.runtimeType);
         }
       });
     }

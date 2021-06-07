@@ -1,15 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:trackingapp/Widgets/User/GlobalVariables.dart';
+import 'package:trackingapp/Widgets/User/SnackBar.dart';
 import 'package:trackingapp/Widgets/User/TaxiButton.dart';
 import 'package:trackingapp/brand_colors.dart';
 
-class CollectPaymentUser extends StatelessWidget {
+class CollectPaymentUser extends StatefulWidget {
 
   final String paymentMethod;
   final int fares;
 
   CollectPaymentUser({this.paymentMethod, this.fares});
 
+  @override
+  _CollectPaymentUserState createState() => _CollectPaymentUserState();
+}
 
+class _CollectPaymentUserState extends State<CollectPaymentUser> {
+  Razorpay _razorpay;
+
+  @override
+  void initState() {
+    super.initState();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _razorpay.clear();
+  }
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -32,7 +55,7 @@ class CollectPaymentUser extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.03,
             ),
 
-            Text('${paymentMethod.toUpperCase()} PAYMENT'),
+            Text('${widget.paymentMethod.toUpperCase()} PAYMENT'),
 
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.03,
@@ -50,7 +73,7 @@ class CollectPaymentUser extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.02,
             ),
 
-            Text("\u20B9 $fares", style: TextStyle(fontFamily: 'Brand-Bold', fontSize: 50),),
+            Text("\u20B9 ${widget.fares}", style: TextStyle(fontFamily: 'Brand-Bold', fontSize: 50),),
 
             SizedBox(height: 16,),
 
@@ -66,10 +89,10 @@ class CollectPaymentUser extends StatelessWidget {
             Container(
               width: 230,
               child: TaxiButton(
-                title: (paymentMethod == 'cash') ? 'PAY CASH' : 'CONFIRM',
+                title: (widget.paymentMethod == 'cash') ? 'PAY CASH' : 'CONFIRM',
                 bgColor: BrandColors.colorGreen,
                 onPressed: (){
-                  Navigator.pop(context,"close");
+                  openCheckout();
                 },
               ),
             ),
@@ -81,5 +104,44 @@ class CollectPaymentUser extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void openCheckout() async {
+    var options = {
+      'key': 'rzp_test_1DP5mmOlF5G5ag',
+      'amount': widget.fares.toInt()*100,
+      "currency": "INR",
+      'name': 'G-TAXI',
+      'description': 'Total Ride Expense',
+      'prefill': {'contact': '${currentUserInfo.phoneNumber}', 'email': '${currentUserInfo.email}','name': '${currentUserInfo.name}',},
+      'external': {
+        'wallets': ['paytm']
+      },
+      "image": "https://firebasestorage.googleapis.com/v0/b/gtaxi-de82d.appspot.com/o/logo.png?alt=media&token=e2ede737-9ad1-40a3-99f2-31ffe1bfac96",
+      "theme": {
+        "color": "#40CF89"
+      },
+    };
+
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      debugPrint('Error: e');
+    }
+  }
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    rootScaffoldMessengerKey.currentState.showSnackBar(
+        showSnackBar("Payment is Successful", context));
+    Navigator.pop(context,"close");
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    rootScaffoldMessengerKey.currentState.showSnackBar(
+        showSnackBar("ERROR: " + response.code.toString() + " - " + response.message, context));
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    rootScaffoldMessengerKey.currentState.showSnackBar(
+        showSnackBar("EXTERNAL_WALLET: " + response.walletName, context));
   }
 }
