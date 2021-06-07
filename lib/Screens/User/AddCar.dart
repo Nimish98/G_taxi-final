@@ -387,10 +387,12 @@ class AddCarState extends State<AddCar>{
                         ),
                       ),
                       onPressed: () async{
+
                         final uid= await getCurrentUID();
                         print(uid);
                         setState(() {
-                          ref.doc(uid).collection("Cars data").add(
+                          print("in set state");
+                          ref.add(
                               {
                                 'company name': companyName.text,
                                 'model name': modelName.text,
