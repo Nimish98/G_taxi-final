@@ -16,15 +16,14 @@ import 'package:trackingapp/Helpers/FireHelper.dart';
 import 'package:trackingapp/Helpers/HelperMethods.dart';
 import 'package:trackingapp/Screens/User/LoginPage.dart';
 import 'package:trackingapp/Styles/Styles.dart';
+import 'package:trackingapp/Widgets/User/CollectPaymentDialogUser.dart';
 import 'package:trackingapp/Widgets/User/GlobalVariables.dart';
 import 'package:trackingapp/Widgets/User/NoDriverDialog.dart';
 import 'package:trackingapp/Widgets/User/ProgressDialog.dart';
-import 'package:trackingapp/Widgets/User/SnackBar.dart';
 import 'package:trackingapp/Widgets/User/TaxiButton.dart';
 import 'package:trackingapp/brand_colors.dart';
 import 'package:trackingapp/Screens/User/SearchPage.dart';
 
-import 'Profile.dart';
 import 'Rentals.dart';
 
 class MainPage extends StatefulWidget {
@@ -52,15 +51,26 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   Set<Marker> markers = {};
   Set<Circle> circles = {};
   List<NearbyDriver> availableDrivers;
+  String status = "";
+  String driverCarDetails = "";
+  String driverName = "";
+  String driverPhone = "";
+  String tripStatusDisplay = "Driver is Arriving";
 
   DirectionDetails tripDirectionDetails;
 
   DatabaseReference rideRef;
 
+  StreamSubscription<Event> rideSubscription;
+
   bool nearbyDriversKeyLoaded = false;
   int driverRequestTimeOut = 10;
 
   String appState = "NORMAL";
+
+  double tripSheetHeight = 0;
+
+  bool isRequestingLocationDetails = false;
 
   void signOut() {
     showDialog(
@@ -141,6 +151,14 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     createRideRequest();
   }
 
+  void showTripSheet(){
+    setState(() {
+      rideRequestSheet = 0;
+      tripSheetHeight = MediaQuery.of(context).size.height * 0.40;
+      mapBottomPadding = MediaQuery.of(context).size.height * 0.41;
+    });
+  }
+
   void createMarker(){
     if(nearbyIcon==null){
       ImageConfiguration imageConfiguration = createLocalImageConfiguration(context,size: Size(2,2));
@@ -200,12 +218,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                   height: MediaQuery.of(context).size.height *
                                       0.005,
                                 ),
-                                GestureDetector(
-                                  onTap: (){
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (context) => Profile()));
-                                  },
-                                    child: Text("View Profile")),
+                                Text("View Profile"),
                               ],
                             ),
                           ),
@@ -279,7 +292,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             myLocationButtonEnabled: true,
             padding: EdgeInsets.only(
               bottom: mapBottomPadding,
-              top: MediaQuery.of(context).size.height * 0.41,
+              top: MediaQuery.of(context).size.height * 0.38,
             ),
             initialCameraPosition: CameraPosition(
               target: LatLng(currentUserInfo.currentPosition.latitude,currentUserInfo.currentPosition.longitude),
@@ -565,16 +578,16 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.40,
                           ),
-                          // Text(
-                          //   "\u20B9" +
-                          //       (tripDirectionDetails != null
-                          //           ? "${HelperMethods.estimateFares(tripDirectionDetails)}"
-                          //           : ""),
-                          //   style: TextStyle(
-                          //     fontSize: 18,
-                          //     fontFamily: "Brand-Bold",
-                          //   ),
-                          // ),
+                          Text(
+                            "\u20B9" +
+                                (tripDirectionDetails != null
+                                    ? "${HelperMethods.estimateFaresUser(tripDirectionDetails)}"
+                                    : ""),
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: "Brand-Bold",
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -625,7 +638,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             ),
           ),
 
-          ///  RequestRideSheet
+          ///  Request Ride Sheet
 
           Positioned(
             bottom: 0,
@@ -714,6 +727,179 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               ),
             ),
           ),
+
+          ///  Trip Sheet
+
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: AnimatedSize(
+              vsync: this,
+              duration: new Duration(milliseconds: 150),
+              curve: Curves.easeIn,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 15.0, // soften the shadow
+                      spreadRadius: 0.5, //extend the shadow
+                      offset: Offset(
+                        0.7, // Move to right 10  horizontally
+                        0.7, // Move to bottom 10 Vertically
+                      ),
+                    )
+                  ],
+                ),
+                height: tripSheetHeight,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.03,
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          tripStatusDisplay,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 18, fontFamily: 'Brand-Bold'),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.03,
+                    ),
+
+                    Divider(
+                      height: 2,
+                      thickness: 1.5,
+                      indent: 10,
+                      endIndent: 10,
+                      color: BrandColors.colorLightGrayFair,
+                    ),
+
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.03,
+                    ),
+
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.06,
+                        ),
+                        Text(driverCarDetails, style: TextStyle(color: BrandColors.colorTextLight),),
+                      ],
+                    ),
+
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.06,
+                        ),
+                        Text(driverName, style: TextStyle(fontSize: 20),),
+                      ],
+                    ),
+
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.03,
+                    ),
+
+                    Divider(
+                      height: 2,
+                      thickness: 1.5,
+                      indent: 10,
+                      endIndent: 10,
+                      color: BrandColors.colorLightGrayFair,
+                    ),
+
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.03,
+                    ),
+
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+
+                            Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular((25))),
+                                border: Border.all(width: 1.0, color: BrandColors.colorTextLight),
+                              ),
+                              child: Icon(Icons.call),
+                            ),
+
+                            SizedBox(height: 10,),
+
+                            Text('Call'),
+                          ],
+                        ),
+
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+
+                            Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular((25))),
+                                border: Border.all(width: 1.0, color: BrandColors.colorTextLight),
+                              ),
+                              child: Icon(Icons.list),
+                            ),
+
+                            SizedBox(height: 10,),
+
+                            Text('Details'),
+                          ],
+                        ),
+
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+
+                            Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular((25))),
+                                border: Border.all(width: 1.0, color: BrandColors.colorTextLight),
+                              ),
+                              child: Icon(OMIcons.clear),
+                            ),
+
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.02,
+                            ),
+
+                            Text('Cancel'),
+                          ],
+                        ),
+
+                      ],
+                    )
+
+                  ],
+                ),
+              ),
+            ),
+          ),
+
         ],
       ),
     );
@@ -954,6 +1140,130 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     };
 
     rideRef.set(rideMap);
+    rideSubscription = rideRef.onValue.listen((event) async{
+      if(event.snapshot.value == null){
+       print("Value is null");
+      }
+
+      ///Get Car Details
+
+      if(event.snapshot.value["car_details"]!=null){
+        setState(() {
+          driverCarDetails = event.snapshot.value["car_details"].toString();
+        });
+      }
+      ///Get Driver Name
+
+      if(event.snapshot.value["driver_name"]!=null){
+        setState(() {
+          driverName = event.snapshot.value["driver_name"].toString();
+        });
+      }
+      ///Get Driver Phone number
+
+      if(event.snapshot.value["driver_phone"]!=null){
+        setState(() {
+          driverCarDetails = event.snapshot.value["driver_phone"].toString();
+        });
+      }
+
+      ///Get and USe Driver Location Updates
+      if(event.snapshot.value["driver_location"]!=null){
+        double driverLat = double.parse(event.snapshot.value["driver_location"]["latitude"].toString());
+        double driverLng = double.parse(event.snapshot.value["driver_location"]["longitude"].toString());
+        LatLng driverLocation = LatLng(driverLat,driverLng);
+        if(status=="accepted"){
+          updateToPickUp(driverLocation);
+        }
+        else if(status=="ontrip"){
+          updateToDestination(driverLocation);
+        }
+        else if(status=="arrived"){
+          setState(() {
+            tripStatusDisplay = "Driver has arrived";
+          });
+        }
+
+      }
+
+      if(event.snapshot.value["status"]!=null){
+        setState(() {
+          status = event.snapshot.value["status"].toString();
+        });
+      }
+      if(status=="accepted"){
+        showTripSheet();
+        Geofire.stopListener();
+        removeGeoFireMarkers();
+      }
+
+      if(status=="ended"){
+        if(event.snapshot.value["fares"]!=null){
+          int fares = int.parse(event.snapshot.value["fares"].toString());
+          var response = await showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context){
+                return CollectPaymentUser(paymentMethod: "cash",fares: fares,);
+              }
+          );
+          if(response=="close"){
+            rideRef.onDisconnect();
+            rideRef = null;
+            rideSubscription.cancel();
+            rideSubscription = null;
+            resetApp();
+          }
+        }
+      }
+
+    });
+
+  }
+
+  void removeGeoFireMarkers(){
+    setState(() {
+      markers.removeWhere((m) => m.markerId.value.contains("driver"));
+    });
+  }
+
+  void updateToPickUp(LatLng driverLocation)async{
+
+    if(!isRequestingLocationDetails){
+      isRequestingLocationDetails = true;
+      var positionLatLng = LatLng(currentUserInfo.currentPosition.latitude,currentUserInfo.currentPosition.longitude);
+      var thisDetails = await HelperMethods.getDirectionDetails(driverLocation, positionLatLng);
+      if(thisDetails==null){
+        print("details are Empty");
+      }
+      else{
+        setState(() {
+          tripStatusDisplay = "Driver is Arriving - ${thisDetails.durationText}";
+        });
+      }
+      isRequestingLocationDetails = false;
+    }
+
+  }
+
+  void updateToDestination(LatLng driverLocation)async{
+
+    if(!isRequestingLocationDetails){
+      isRequestingLocationDetails = true;
+      var destination = Provider.of<AppData>(context).destinationAddress;
+      var destinationLatLng = LatLng(destination.latitude,destination.longitude);
+      var thisDetails = await HelperMethods.getDirectionDetails(driverLocation, destinationLatLng);
+      if(thisDetails==null){
+        print("details are Empty");
+      }
+      else{
+        setState(() {
+          tripStatusDisplay = "Driver to Destination - ${thisDetails.durationText}";
+        });
+      }
+      isRequestingLocationDetails = false;
+    }
+
   }
 
   void cancelRequest() {
@@ -969,8 +1279,14 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       circles.clear();
       rideDetailSheet = 0;
       rideRequestSheet = 0;
+      tripSheetHeight = 0;
       searchDetailSheet = MediaQuery.of(context).size.height * 0.36;
       drawerCanOpen = true;
+      status = "";
+      driverCarDetails = "";
+      driverName = "";
+      driverPhone = "";
+      tripStatusDisplay = "Driver is Arriving";
     });
     setupPositionLocator();
   }

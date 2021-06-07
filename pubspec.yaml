@@ -49,6 +49,7 @@ dependencies:
   flutter_local_notifications: ^6.0.0
   assets_audio_player: ^3.0.3+3
   maps_toolkit: ^2.0.0
+  intl: ^0.17.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

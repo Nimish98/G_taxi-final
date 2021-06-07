@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import 'package:trackingapp/Screens/Driver/TabBar/EarningsTab.dart';
 import 'package:trackingapp/Screens/Driver/TabBar/HomeTab.dart';
 import 'package:trackingapp/Screens/Driver/TabBar/ProfileTab.dart';
-import 'package:trackingapp/Screens/Driver/TabBar/RatingsTab.dart';
 import 'package:trackingapp/Widgets/User/GlobalVariables.dart';
 import 'package:trackingapp/brand_colors.dart';
 
@@ -31,7 +30,7 @@ class _DriverMainPageState extends State<DriverMainPage> with SingleTickerProvid
   void initState() {
     // TODO: implement initState
     super.initState();
-    tabController = TabController(length: 4, vsync: this);
+    tabController = TabController(length: 3, vsync: this);
   }
   @override
   void dispose() {
@@ -52,10 +51,6 @@ class _DriverMainPageState extends State<DriverMainPage> with SingleTickerProvid
           BottomNavigationBarItem(
             icon: Icon(Icons.credit_card),
             label: "Earnings",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: "Ratings",
           ),BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: "Profile",
@@ -77,7 +72,6 @@ class _DriverMainPageState extends State<DriverMainPage> with SingleTickerProvid
         children: [
           HomeTab(coordinate: currentDriverInfo.currentPosition,),
           EarningsTab(),
-          RatingsTab(),
           ProfileTab()
         ],
       ),

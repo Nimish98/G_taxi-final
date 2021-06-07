@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:trackingapp/Helpers/HelperMethods.dart';
 import 'package:trackingapp/Helpers/PushNotificationService.dart';
 import 'package:trackingapp/Widgets/Driver/ConfirmSheet.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -37,6 +38,7 @@ class _HomeTabState extends State<HomeTab> {
     PushNotificationService pushNotificationService = PushNotificationService();
     pushNotificationService.initialize(context);
     pushNotificationService.getToken();
+    HelperMethods.getHistoryInfo(context);
   }
 
   @override
