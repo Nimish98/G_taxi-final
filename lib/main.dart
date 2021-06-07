@@ -6,6 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:trackingapp/DataProviders/SharedPreferences.dart';
 import 'package:trackingapp/Screens/Driver/DriverMainPage.dart';
+import 'package:trackingapp/Screens/Driver/HistoryPage.dart';
 import 'package:trackingapp/Screens/Driver/NewTripPage.dart';
 import 'package:trackingapp/Screens/Driver/VehiclesInfo.dart';
 import 'package:trackingapp/Screens/User/AddCar.dart';
@@ -73,7 +74,7 @@ class _MyAppState extends State<MyApp> {
           fontFamily: "Brand-Regular",
           // primarySwatch: Colors.blue,
         ),
-        initialRoute: widget.firstTimeOpen?LoginPage.id:StartingPage.id,
+        initialRoute: StartingPage.id,
         routes: {
           StartingPage.id:(context) => StartingPage(),
           LoginPage.id: (context) => LoginPage(),
@@ -86,6 +87,7 @@ class _MyAppState extends State<MyApp> {
           LocationSearch.id:(context)=>LocationSearch(),
           SearchPage.id:(context)=>SearchPage(),
           NewTripPage.id:(context)=>NewTripPage(),
+          HistoryPage.id:(context)=>HistoryPage(),
         },
       ),
     );
