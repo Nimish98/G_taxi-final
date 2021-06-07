@@ -19,12 +19,12 @@ import 'package:trackingapp/Styles/Styles.dart';
 import 'package:trackingapp/Widgets/User/GlobalVariables.dart';
 import 'package:trackingapp/Widgets/User/NoDriverDialog.dart';
 import 'package:trackingapp/Widgets/User/ProgressDialog.dart';
-import 'package:trackingapp/Widgets/User/RideVariables.dart';
 import 'package:trackingapp/Widgets/User/SnackBar.dart';
 import 'package:trackingapp/Widgets/User/TaxiButton.dart';
 import 'package:trackingapp/brand_colors.dart';
 import 'package:trackingapp/Screens/User/SearchPage.dart';
 
+import 'Profile.dart';
 import 'Rentals.dart';
 
 class MainPage extends StatefulWidget {
@@ -200,7 +200,12 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                   height: MediaQuery.of(context).size.height *
                                       0.005,
                                 ),
-                                Text("View Profile"),
+                                GestureDetector(
+                                  onTap: (){
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) => Profile()));
+                                  },
+                                    child: Text("View Profile")),
                               ],
                             ),
                           ),
