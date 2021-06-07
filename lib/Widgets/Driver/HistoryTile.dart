@@ -32,7 +32,7 @@ class HistoryTile extends StatelessWidget {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.02,
                     ),
-                    Text('\u20B9 ${history.fares}', style: TextStyle(fontFamily: 'Brand-Bold', fontSize: 16, color: BrandColors.colorPrimary),),
+                    Text('\u20B9 '+ history.fares != null ? '${history.fares}' :"0", style: TextStyle(fontFamily: 'Brand-Bold', fontSize: 16, color: BrandColors.colorPrimary),),
                   ],
                 ),
               ),

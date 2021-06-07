@@ -2,6 +2,8 @@ import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
+import 'package:provider/provider.dart';
+import 'package:trackingapp/DataProviders/AppData.dart';
 import 'package:trackingapp/Widgets/User/GlobalVariables.dart';
 
 class Profile extends StatefulWidget{
@@ -126,6 +128,67 @@ class ProfileState extends State<Profile>{
                   topLeft: Radius.circular(70),
                 ),
                 color: Colors.white,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: 20,),
+                  Text(
+                    "Other Details",
+                    style: TextStyle(
+                        fontSize: 24,
+                        fontFamily: "Brand-Bold",
+                        color: Colors.black87),
+                  ),
+                  SizedBox(
+                    height: 40,
+                  ),
+                  Divider(thickness: 1,endIndent: 15,indent: 15,color: Colors.blueGrey.shade100,),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(width: 20,),
+                      Icon(Icons.money,color: Colors.blueGrey,size: 35,),
+                      SizedBox(width: 20,),
+                      Text('Total Spending', style: TextStyle(color: Colors.black87,fontSize: 16),),
+                      SizedBox(width: MediaQuery.of(context).size.width*0.35,),
+                      Text( '\u20B9 ${Provider.of<AppData>(context).earnings}', style: TextStyle(color: Colors.black87,fontSize: 16),),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Divider(thickness: 1,endIndent: 15,indent: 15,color: Colors.blueGrey.shade100,),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                        padding: EdgeInsets.all(0),
+                        primary: Colors.black87
+                    ),
+                    onPressed: (){
+                      // Navigator.pushNamed(context, HistoryPage.id);
+                    },
+
+                    child: Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 10, vertical: 18),
+                      child: Row(
+                        children: [
+                          Image.asset('images/taxi.png', width: 70,),
+                          SizedBox(width: 16,),
+                          Text('Rides', style: TextStyle(fontSize: 16), ),
+                          SizedBox(width: MediaQuery.of(context).size.width*0.5,),
+                          Container(child: Text("0", textAlign: TextAlign.end, style: TextStyle(fontSize: 18),)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Divider(thickness: 1,endIndent: 15,indent: 15,color: Colors.blueGrey.shade100,),
+                ],
               ),
             ),
           ),
