@@ -225,6 +225,7 @@ class HelperMethods {
               history);
 
           print(history.destination);
+          print(history.fares.runtimeType);
         }
       });
     }

@@ -20,7 +20,6 @@ import 'package:trackingapp/Styles/Styles.dart';
 import 'package:trackingapp/Widgets/User/CollectPaymentDialogUser.dart';
 import 'package:trackingapp/Widgets/User/GlobalVariables.dart';
 import 'package:trackingapp/Widgets/User/NoDriverDialog.dart';
-import 'package:trackingapp/Widgets/User/PaymentScreen.dart';
 import 'package:trackingapp/Widgets/User/ProgressDialog.dart';
 import 'package:trackingapp/Widgets/User/TaxiButton.dart';
 import 'package:trackingapp/brand_colors.dart';
@@ -247,9 +246,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                     "Payments",
                     style: kDrawerItemStyle,
                   ),
-                  onTap: (){
-                    Navigator.pushNamed(context, PaymentScreen.id);
-                  },
                 ),
                 ListTile(
                   leading: Icon(OMIcons.history),
@@ -588,16 +584,16 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.40,
                           ),
-                          Text(
-                            "\u20B9" +
-                                (tripDirectionDetails != null
-                                    ? "${HelperMethods.estimateFaresUser(tripDirectionDetails)}"
-                                    : ""),
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: "Brand-Bold",
-                            ),
-                          ),
+                          // Text(
+                          //   "\u20B9" +
+                          //       (tripDirectionDetails != null
+                          //           ? "${HelperMethods.estimateFaresUser(tripDirectionDetails)}"
+                          //           : ""),
+                          //   style: TextStyle(
+                          //     fontSize: 18,
+                          //     fontFamily: "Brand-Bold",
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),

@@ -19,7 +19,6 @@ import 'package:trackingapp/Screens/User/SearchPage.dart';
 import 'package:trackingapp/Screens/User/StartingPage.dart';
 import 'package:trackingapp/DataProviders/AppData.dart';
 import 'package:trackingapp/Widgets/User/GlobalVariables.dart';
-import 'package:trackingapp/Widgets/User/PaymentScreen.dart';
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -89,7 +88,6 @@ class _MyAppState extends State<MyApp> {
           SearchPage.id:(context)=>SearchPage(),
           NewTripPage.id:(context)=>NewTripPage(),
           HistoryPage.id:(context)=>HistoryPage(),
-          PaymentScreen.id:(context)=>PaymentScreen(),
         },
       ),
     );
