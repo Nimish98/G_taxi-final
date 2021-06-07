@@ -67,49 +67,11 @@ class ProfileState extends State<Profile>{
                     ),
                   ],
                 ),
-                SizedBox(height: 85,),
+                SizedBox(height: 95,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "3.6",
-                          style: TextStyle(
-                              fontSize: 23,
-                              fontFamily: "Brand-Bold",
-                              color: Colors.black87),
-                        ),
-                        SizedBox(height: 7,),
-                        Text(
-                          "Rating",
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black87),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "UP76Q8569",
-                          style: TextStyle(
-                              fontSize: 23,
-                              fontFamily: "Brand-Bold",
-                              color: Colors.black87),
-                        ),
-                        SizedBox(height: 7,),
-                        Text(
-                          "Vehicle No.",
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black87),
-                        ),
-                      ],
-                    ),
+                    SizedBox(width: MediaQuery.of(context).size.width*0.5,),
                     Container(
                       height: 30,
                       width: 85,
