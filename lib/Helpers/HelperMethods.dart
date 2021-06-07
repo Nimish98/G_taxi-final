@@ -224,6 +224,7 @@ class HelperMethods {
           Provider.of<AppData>(context, listen: false).updateTripHistory(
               history);
 
+          print(history.pickup);
           print(history.destination);
           print(history.fares.runtimeType);
         }
