@@ -66,7 +66,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   StreamSubscription<Event> rideSubscription;
 
   bool nearbyDriversKeyLoaded = false;
-  int driverRequestTimeOut = 10;
+  int driverRequestTimeOut = 20;
 
   String appState = "NORMAL";
 
@@ -1347,7 +1347,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         driverTripRef.set("cancelled");
         driverTripRef.onDisconnect();
         timer.cancel();
-        driverRequestTimeOut = 10;
+        driverRequestTimeOut = 20;
       }
 
       driverRequestTimeOut--;
@@ -1361,7 +1361,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
           driverTripRef.onDisconnect();
           timer.cancel();
-          driverRequestTimeOut = 10;
+          driverRequestTimeOut = 20;
         }
       });
 
@@ -1371,7 +1371,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
         driverTripRef.set("timeout");
         driverTripRef.onDisconnect();
-        driverRequestTimeOut = 10;
+        driverRequestTimeOut = 20;
         timer.cancel();
 
         ///Select New Driver
