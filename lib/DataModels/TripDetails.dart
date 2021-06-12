@@ -6,7 +6,6 @@ class TripDetails{
   LatLng pickUp;
   LatLng destination;
   String rideId;
-  String paymentMethod;
   String riderName;
   String riderPhone;
   TripDetails({
@@ -15,7 +14,6 @@ class TripDetails{
     this.destination,
     this.pickUp,
     this.pickupAddress,
-    this.paymentMethod,
     this.riderName,
     this.riderPhone
   });

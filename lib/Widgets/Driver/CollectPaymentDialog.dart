@@ -5,10 +5,9 @@ import 'package:trackingapp/brand_colors.dart';
 
 class CollectPayment extends StatelessWidget {
 
-  final String paymentMethod;
   final int fares;
 
-  CollectPayment({this.paymentMethod, this.fares});
+  CollectPayment({this.fares});
 
 
   @override
@@ -33,7 +32,7 @@ class CollectPayment extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.03,
             ),
 
-            Text('${paymentMethod.toUpperCase()} PAYMENT'),
+            Text('PAYMENT'),
 
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.03,
@@ -67,7 +66,7 @@ class CollectPayment extends StatelessWidget {
             Container(
               width: 230,
               child: TaxiButton(
-                title: (paymentMethod == 'cash') ? 'COLLECT CASH' : 'CONFIRM',
+                title: 'CONFIRM',
                 bgColor: BrandColors.colorGreen,
                 onPressed: (){
 
