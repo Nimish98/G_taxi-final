@@ -7,10 +7,9 @@ import 'package:trackingapp/brand_colors.dart';
 
 class CollectPaymentUser extends StatefulWidget {
 
-  final String paymentMethod;
   final int fares;
 
-  CollectPaymentUser({this.paymentMethod, this.fares});
+  CollectPaymentUser({ this.fares});
 
   @override
   _CollectPaymentUserState createState() => _CollectPaymentUserState();
@@ -55,7 +54,7 @@ class _CollectPaymentUserState extends State<CollectPaymentUser> {
               height: MediaQuery.of(context).size.height * 0.03,
             ),
 
-            Text('${widget.paymentMethod.toUpperCase()} PAYMENT'),
+            Text('PAYMENT'),
 
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.03,
@@ -89,7 +88,7 @@ class _CollectPaymentUserState extends State<CollectPaymentUser> {
             Container(
               width: 230,
               child: TaxiButton(
-                title: (widget.paymentMethod == 'cash') ? 'PAY CASH' : 'CONFIRM',
+                title: 'PAY',
                 bgColor: BrandColors.colorGreen,
                 onPressed: (){
                   openCheckout();
@@ -117,7 +116,6 @@ class _CollectPaymentUserState extends State<CollectPaymentUser> {
       'external': {
         'wallets': ['paytm']
       },
-      "image": "https://firebasestorage.googleapis.com/v0/b/gtaxi-de82d.appspot.com/o/logo.png?alt=media&token=e2ede737-9ad1-40a3-99f2-31ffe1bfac96",
       "theme": {
         "color": "#40CF89"
       },

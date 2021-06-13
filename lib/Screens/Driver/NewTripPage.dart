@@ -537,7 +537,6 @@ class _NewTripPageState extends State<NewTripPage> {
         context: context,
         builder: (BuildContext context){
           return CollectPayment(
-            paymentMethod: tripDetails.paymentMethod,
             fares: fares,
           );
         }

@@ -1141,7 +1141,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       "destination_address": destination.placeName,
       "location": pickUpMap,
       "destination": destinationMap,
-      "payment": "Card",
       "driver_id": "waiting",
     };
 
@@ -1210,7 +1209,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               barrierDismissible: false,
               context: context,
               builder: (BuildContext context){
-                return CollectPaymentUser(paymentMethod: "cash",fares: fares,);
+                return CollectPaymentUser(fares: fares,);
               }
           );
           if(response=="close"){
